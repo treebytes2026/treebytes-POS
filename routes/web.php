@@ -8,19 +8,11 @@ Route::get('/', function () {
 })->name('home');
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\DashboardController;
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        $activeSubs = \App\Models\Subscription::where('status', 'active')->count();
-        $expiredAccounts = \App\Models\Subscription::where('status', 'expired')->count();
-        $stats = [
-            [ 'title' => 'Total Sales', 'value' => '$0.00', 'icon' => 'CreditCard', 'color' => 'text-emerald-500', 'bg' => 'bg-emerald-500/10' ],
-            [ 'title' => 'Total Users', 'value' => (string)\App\Models\User::count(), 'icon' => 'Users', 'color' => 'text-blue-500', 'bg' => 'bg-blue-500/10' ],
-            [ 'title' => 'Active Subscriptions', 'value' => (string)$activeSubs, 'icon' => 'Store', 'color' => 'text-indigo-500', 'bg' => 'bg-indigo-500/10' ],
-            [ 'title' => 'Expired Accounts', 'value' => (string)$expiredAccounts, 'icon' => 'AlertCircle', 'color' => 'text-rose-500', 'bg' => 'bg-rose-500/10' ],
-        ];
-        return Inertia::render('dashboard', [ 'stats' => $stats ]);
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::post('admin/restaurants', [AdminController::class, 'store'])->name('admin.restaurants.store');
@@ -30,6 +22,34 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/users', [AdminController::class, 'users'])->name('admin.users.index');
     Route::put('admin/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
     Route::delete('admin/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+
+    // Restaurant Owner / Staff Routes
+    Route::get('/restaurant/dashboard', [RestaurantController::class, 'index'])->name('restaurant.dashboard');
+    Route::get('/restaurant/pos', [RestaurantController::class, 'pos'])->name('restaurant.pos');
+    Route::post('/restaurant/process-order', [RestaurantController::class, 'processOrder'])->name('restaurant.process-order');
+    Route::get('/restaurant/categories', [RestaurantController::class, 'categories'])->name('restaurant.categories');
+    Route::post('/restaurant/categories', [RestaurantController::class, 'storeCategory'])->name('restaurant.categories.store');
+    Route::put('/restaurant/categories/{category}', [RestaurantController::class, 'updateCategory'])->name('restaurant.categories.update');
+    Route::delete('/restaurant/categories/{category}', [RestaurantController::class, 'destroyCategory'])->name('restaurant.categories.destroy');
+
+    Route::get('/restaurant/products', [RestaurantController::class, 'products'])->name('restaurant.products');
+    Route::post('/restaurant/products', [RestaurantController::class, 'storeProduct'])->name('restaurant.products.store');
+    Route::post('/restaurant/products/{product}', [RestaurantController::class, 'updateProduct'])->name('restaurant.products.update'); // using POST for file upload support in Inertia
+    Route::post('/restaurant/products/{product}/recipe', [RestaurantController::class, 'updateRecipe'])->name('restaurant.products.recipe');
+    Route::get('/restaurant/orders', [RestaurantController::class, 'orders'])->name('restaurant.orders.index');
+    Route::patch('/restaurant/orders/{order}/status', [RestaurantController::class, 'updateOrderStatus'])->name('restaurant.orders.status');
+
+    Route::get('/restaurant/inventory', [RestaurantController::class, 'inventory'])->name('restaurant.inventory');
+    Route::post('/restaurant/ingredients', [RestaurantController::class, 'storeIngredient'])->name('restaurant.ingredients.store');
+    Route::put('/restaurant/ingredients/{ingredient}', [RestaurantController::class, 'updateIngredient'])->name('restaurant.ingredients.update');
+    Route::delete('/restaurant/ingredients/{ingredient}', [RestaurantController::class, 'destroyIngredient'])->name('restaurant.ingredients.destroy');
+    Route::get('/restaurant/staff', [RestaurantController::class, 'staff'])->name('restaurant.staff');
+    Route::post('/restaurant/staff', [RestaurantController::class, 'storeStaff'])->name('restaurant.staff.store');
+    Route::post('/restaurant/staff/{staff}', [RestaurantController::class, 'updateStaff'])->name('restaurant.staff.update');
+    Route::delete('/restaurant/staff/{staff}', [RestaurantController::class, 'destroyStaff'])->name('restaurant.staff.destroy');
+
+    Route::get('/restaurant/settings', [RestaurantController::class, 'settings'])->name('restaurant.settings');
+    Route::post('/restaurant/settings', [RestaurantController::class, 'updateSettings'])->name('restaurant.settings.update');
 });
 
 require __DIR__.'/settings.php';

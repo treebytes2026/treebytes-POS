@@ -211,8 +211,8 @@ export default function Restaurants({ restaurants = [] }: RestaurantsProps) {
                                             <Label htmlFor="plan_type">Subscription Plan</Label>
                                             <select id="plan_type" value={data.plan_type} onChange={e => setData('plan_type', e.target.value)} className="flex h-9 w-full items-center justify-between rounded-md border border-neutral-200 bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-white focus:outline-none focus:ring-1 focus:ring-neutral-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300">
                                                 <option value="trial">14-Day Trial</option>
-                                                <option value="monthly">Monthly ($49)</option>
-                                                <option value="yearly">Yearly ($490)</option>
+                                                <option value="monthly">Monthly (₱49)</option>
+                                                <option value="yearly">Yearly (₱490)</option>
                                             </select>
                                         </div>
                                         <div className="space-y-2">

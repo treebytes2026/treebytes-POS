@@ -86,7 +86,7 @@ class AdminController extends Controller
         }
 
         // Provision a User account for the restaurant owner
-        User::create([
+        $user = User::create([
             'name' => $validated['owner_name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -101,6 +101,9 @@ class AdminController extends Controller
             'status' => $validated['status'],
             'logo' => $logoPath,
         ]);
+
+        // Link user to restaurant
+        $user->update(['restaurant_id' => $restaurant->id]);
 
         // Create subscription
         $endDate = Carbon::now();

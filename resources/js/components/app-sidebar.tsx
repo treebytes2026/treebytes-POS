@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ChevronRight, Folder, LayoutGrid, Settings, Store, Users } from 'lucide-react';
+import { ChevronRight, LayoutGrid, Settings, Store, Users, ShoppingCart, List, Package } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -16,18 +16,53 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const restaurantNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'Dashboard',
+        url: '/restaurant/dashboard',
+        icon: LayoutGrid,
     },
     {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'POS Interface',
+        url: '/restaurant/pos',
+        icon: ShoppingCart,
     },
 ];
+
+const restaurantManageItems: NavItem[] = [
+    {
+        title: 'Orders',
+        url: '/restaurant/orders',
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Menu Items',
+        url: '/restaurant/products',
+        icon: List,
+    },
+    {
+        title: 'Categories',
+        url: '/restaurant/categories',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Inventory',
+        url: '/restaurant/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Staff Management',
+        url: '/restaurant/staff',
+        icon: Users,
+    },
+    {
+        title: 'Restaurant Settings',
+        url: '/restaurant/settings',
+        icon: Settings,
+    },
+];
+
+const footerNavItems: NavItem[] = [];
 
 const adminPlatformItems: NavItem[] = [
     {
@@ -52,7 +87,10 @@ export function AppSidebar() {
 
     const platformItems = isSuperAdmin
         ? [...mainNavItems, ...adminPlatformItems]
-        : mainNavItems;
+        : []; // For restaurant users, we use the logo link and the Management section instead, or just keep restaurantNavItems if we want.
+    
+    // Let's actually keep restaurantNavItems in platformItems for better visibility of "Dashboard" and "POS"
+    const finalPlatformItems = isSuperAdmin ? platformItems : restaurantNavItems;
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -60,8 +98,8 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
-                                <AppLogo />
+                            <Link href={isSuperAdmin ? '/dashboard' : '/restaurant/dashboard'} prefetch>
+                                <AppLogo restaurant={auth.user.restaurant} />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -69,7 +107,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={platformItems} />
+                <NavMain items={finalPlatformItems} />
 
                 {isSuperAdmin && (
                     <SidebarGroup className="px-2 py-0">
@@ -100,6 +138,24 @@ export function AppSidebar() {
                                     </CollapsibleContent>
                                 </SidebarMenuItem>
                             </Collapsible>
+                        </SidebarMenu>
+                    </SidebarGroup>
+                )}
+
+                {!isSuperAdmin && (
+                    <SidebarGroup className="px-2 py-0">
+                        <SidebarGroupLabel>Management</SidebarGroupLabel>
+                        <SidebarMenu>
+                            {restaurantManageItems.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton tooltip={item.title} asChild isActive={item.url === page.url}>
+                                        <Link href={item.url} prefetch>
+                                            {item.icon && <item.icon />}
+                                            <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
                         </SidebarMenu>
                     </SidebarGroup>
                 )}
