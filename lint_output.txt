@@ -1,0 +1,15 @@
+
+> lint
+> eslint . --fix
+
+
+C:\LaravelProjects\POS-treebytes\resources\js\layouts\auth\auth-split-card-layout.tsx
+  12:57  error  'title' is defined but never used                @typescript-eslint/no-unused-vars
+  12:64  error  'description' is defined but never used          @typescript-eslint/no-unused-vars
+  17:11  error  'posEmerald' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\LaravelProjects\POS-treebytes\resources\js\pages\auth\login.tsx
+  17:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 4 problems (4 errors, 0 warnings)
+

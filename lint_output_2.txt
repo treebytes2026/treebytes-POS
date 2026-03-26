@@ -1,0 +1,11 @@
+
+> lint
+> eslint . --fix
+
+
+C:\LaravelProjects\POS-treebytes\resources\js\layouts\auth\auth-split-card-layout.tsx
+  12:57  error  'title' is defined but never used        @typescript-eslint/no-unused-vars
+  12:64  error  'description' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (2 errors, 0 warnings)
+
