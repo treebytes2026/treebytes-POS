@@ -1,0 +1,12 @@
+
+> lint
+> eslint . --fix
+
+
+C:\LaravelProjects\POS-treebytes\resources\js\pages\Admin\Restaurants.tsx
+  5:10  error  'Users' is defined but never used        @typescript-eslint/no-unused-vars
+  5:24  error  'CreditCard' is defined but never used   @typescript-eslint/no-unused-vars
+  5:36  error  'AlertCircle' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 3 problems (3 errors, 0 warnings)
+
